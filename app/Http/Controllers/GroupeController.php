@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GroupeRequest;
 use App\Models\Etudiant;
 use App\Models\Groupe;
+use App\Models\Specialite;
 use Exception;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class GroupeController extends Controller
     public function index()
     {
         try {
-            $Groupes = Groupe::select('groupes.id', 'groupes.nom_groupe', 'groupes.niveau', 'specialites.nom_specialite', 'groupes.annee_scolaire')
+            $Groupes = Groupe::select('groupes.id', 'groupes.nom_groupe', 'groupes.niveau', 'groupes.id_specialite' , 'specialites.nom_specialite', 'groupes.annee_scolaire')
             ->join('specialites', 'groupes.id_specialite', '=', 'specialites.id')
             ->orderBy('groupes.id', 'desc')
             ->get();
@@ -33,7 +34,12 @@ class GroupeController extends Controller
      */
     public function create()
     {
-        //
+        try {
+           $specialites = Specialite::all() ;
+           return response()->json(['specialites' => $specialites]) ;
+        }catch(Exception $e) {
+            return response()->json(["message" => "il ya quelque erreur veuillez verifier : {$e->getMessage()}" ] , 403) ;
+        }
     }
 
     /**
@@ -79,13 +85,19 @@ class GroupeController extends Controller
      */
     public function edit($id)
     {
-       //
+        try {
+            $groupe = Groupe::findOrFail($id) ;
+            $specialites = Specialite::all() ;
+            return response()->json(['specialites' => $specialites , 'groupe' => $groupe]) ;
+         }catch(Exception $e) {
+             return response()->json(["message" => "il ya quelque erreur veuillez verifier : {$e->getMessage()}" ] , 403) ;
+         }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(GroupeRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             Groupe::findOrFail($id)->update([

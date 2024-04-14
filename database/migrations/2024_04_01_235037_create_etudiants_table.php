@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('id_groupe')->references('id')->on('groupes')->onDelete('cascade')->onUpdate('cascade');
             $table->string("Telephone") ;
             $table->string('email')->unique();
-            $table->string('email_responsbale')->unique()->nullable();
+            $table->string('email_responsable')->unique()->nullable();
             $table->string('Telephone_responsable')->nullable() ;
             $table->timestamps();
         });

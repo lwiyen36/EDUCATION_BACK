@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Matiere extends Model
 {
+    protected $fillable = ['nom_matiere' , 'Coefficient'] ;
     use HasFactory;
 }

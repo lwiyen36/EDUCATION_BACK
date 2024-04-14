@@ -15,7 +15,7 @@ class SpecialiteController extends Controller
     public function index()
     {
         try {
-            $specialites = Specialite::select('id' , 'nom_specialite' , 'description' , 'duree_etude')->get() ;
+            $specialites = Specialite::select('id' , 'nom_specialite' , 'description' , 'duree_etude')->orderBy('id' , 'desc')->get() ;
             return response()->json(['specialites' => $specialites], 200) ;
         }catch(Exception $e) {
             return response()->json(["message" => "il ya quelque erreur veuillez verifier : {$e->getMessage()}" ] , 403) ;
@@ -35,7 +35,7 @@ class SpecialiteController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         try {
            $specialite = new Specialite() ;
           $specialite->nom_specialite = $request->nom_specialite ;
@@ -68,15 +68,20 @@ class SpecialiteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Specialite $specialite)
+    public function edit($id)
     {
-        //
+        try  {
+            $specialite = Specialite::findOrFail($id) ;
+            return response()->json(['specialite' => $specialite] , 200) ;
+        }catch(Exception $e) {
+            return response()->json(["message" => "il ya quelque erreur veuillez verifier : {$e->getMessage()}" ] , 403) ;
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(SpecialiteRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $specialite = Specialite::findOrFail($id) ;

@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Exception ;
 use App\Models\Formateur;
+use App\Models\Matiere;
 use Illuminate\Http\Request;
 
 class FormateurController extends Controller
@@ -12,7 +13,14 @@ class FormateurController extends Controller
      */
     public function index()
     {
-        //
+        try{
+       $formateurs =Formateur::select('formateurs.*' , 'matieres.nom_matiere')->join('matieres', 'matieres.id', '=', 'formateurs.id_matiere')
+        ->orderBy('formateurs.id', 'desc')
+        ->get();
+      return response()->json(['formateurs' => $formateurs], 200);
+} catch (Exception $e) {
+    return response()->json(["message" => "Il y a une erreur, veuillez vérifier : {$e->getMessage()}"], 403);
+}
     }
 
     /**
@@ -20,7 +28,12 @@ class FormateurController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            $matieres = Matiere::all() ;
+            return response()->json(['matieres' => $matieres]) ;
+         }catch(Exception $e) {
+             return response()->json(["message" => "il ya quelque erreur veuillez verifier : {$e->getMessage()}" ] , 403) ;
+         }
     }
 
     /**
