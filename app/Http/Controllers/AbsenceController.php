@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absence;
+use App\Models\Matiere;
+use App\Models\Etudiant;
 use Illuminate\Http\Request;
 
 class AbsenceController extends Controller
@@ -12,7 +14,11 @@ class AbsenceController extends Controller
      */
     public function index()
     {
-        //
+        $absences=Absence::all();
+        $etudiants=Etudiant::all();
+        $matieres=Matiere::all();
+        
+        return response()->json(compact('absences','etudiants','matieres'),200);
     }
 
     /**

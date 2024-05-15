@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 use Exception ;
-use App\Models\Formateur;
 use App\Models\Matiere;
+use App\Models\Etudiant;
+use App\Models\Formateur;
 use Illuminate\Http\Request;
 
 class FormateurController extends Controller
@@ -41,7 +42,21 @@ class FormateurController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Formateur::create($request->all());
+        return response()->json([
+          'message'=>'Le formateur a bien été ajouté.'
+           ],200);
+    }
+
+
+    public function getEtudiants($id) {
+        $etudiants = Etudiant::whereIn('id_groupe', function($query) use ($id) {
+            $query->select('id_groupe')
+                  ->from('emplois_temps')
+                  ->where('id_formateur', $id);
+        })->get();
+        
+        return response()->json(compact('etudiants'), 200);
     }
 
     /**

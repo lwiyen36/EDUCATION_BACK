@@ -4,11 +4,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupeController;
+use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\MatiereController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\ResultatController;
+use App\Http\Controllers\FormateurController;
 use App\Http\Controllers\SpecialiteController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\FormateurController;
-use App\Http\Controllers\MatiereController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,11 @@ Route::prefix('etudiant')->group(function () {
     Route::put('/update/{id}', [EtudiantController::class, 'update']);
     Route::delete('/destroy/{id}', [EtudiantController::class, 'destroy']);
 });
+Route::prefix('resultat')->group(function () {
+   
+    Route::post('/create', [ResultatController::class, 'store']);
+   
+});
 
 Route::prefix('matiere')->group(function () {
     Route::get('/all', [MatiereController::class, 'index']);
@@ -60,15 +67,24 @@ Route::prefix('matiere')->group(function () {
 });
 
 Route::prefix('formateur')->group(function () {
+    Route::get('/etudiants/{id}', [FormateurController::class, 'getEtudiants']);
     Route::get('/all', [FormateurController::class, 'index']);
     Route::get('/show/{id}', [FormateurController::class, 'show']);
-    Route::get('/prepare', [MatiereController::class, 'create']);
+    Route::get('/prepare', [FormateurController::class, 'create']);
     Route::post('/create', [FormateurController::class, 'store']);
     Route::get('/edit/{id}', [FormateurController::class, 'edit']);
     Route::put('/update/{id}', [FormateurController::class, 'update']);
     Route::delete('/destroy/{id}', [FormateurController::class, 'destroy']);
 });
-
+Route::prefix('absence')->group(function () {
+    Route::get('/all', [AbsenceController::class, 'index']);
+    Route::get('/show/{id}', [AbsenceController::class, 'show']);
+    Route::get('/prepare', [AbsenceController::class, 'create']);
+    Route::post('/create', [AbsenceController::class, 'store']);
+    Route::get('/edit/{id}', [AbsenceController::class, 'edit']);
+    Route::put('/update/{id}', [AbsenceController::class, 'update']);
+    Route::delete('/destroy/{id}', [AbsenceController::class, 'destroy']);
+});
 Route::get('/GetRole/{idrole}', [AuthController::class, 'GetRole']);
 
 Route::post('/login' , [AuthController::class , 'Login']) ;
